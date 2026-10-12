@@ -1,0 +1,18 @@
+[package]
+name = "linktrix-asio-host"
+description = "Hosts one hardware ASIO driver for Linktrix Tools in its own process"
+version.workspace = true
+edition.workspace = true
+license = "GPL-3.0-only"
+publish.workspace = true
+
+[[bin]]
+name = "linktrix_asio_host"
+path = "src/main.rs"
+
+[dependencies]
+linktrix-asio = { path = "../linktrix-asio" }
+linktrix-bus = { path = "../linktrix-bus" }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { workspace = true, features = ["Win32_System_SystemInformation", "Win32_System_Kernel"] }

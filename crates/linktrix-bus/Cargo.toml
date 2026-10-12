@@ -1,0 +1,13 @@
+[package]
+name = "linktrix-bus"
+description = "Shared-memory audio bus and ASIO helper protocol shared by Linktrix Tools and its open-source ASIO components"
+version.workspace = true
+edition.workspace = true
+license = "MIT"
+publish.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { workspace = true, features = ["Win32_Security_Authorization"] }

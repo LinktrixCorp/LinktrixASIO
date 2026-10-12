@@ -1,0 +1,15 @@
+[package]
+name = "wat-asio"
+description = "Linktrix Audio 64 IO: the ASIO driver DAWs open to exchange 64 channels with Linktrix Tools"
+version.workspace = true
+edition.workspace = true
+license = "GPL-3.0-only"
+publish.workspace = true
+[lib]
+name = "linktrix_audio_asio"
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+linktrix-asio = { path = "../linktrix-asio" }
+linktrix-bus = { path = "../linktrix-bus" }
+windows-sys.workspace = true
+

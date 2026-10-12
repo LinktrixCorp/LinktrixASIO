@@ -1,0 +1,10 @@
+[package]
+name = "linktrix-asio"
+description = "Windows x64 IASIO interface for the Linktrix open-source ASIO components"
+version.workspace = true
+edition.workspace = true
+license = "GPL-3.0-only"
+publish.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows-sys.workspace = true
