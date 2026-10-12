@@ -62,7 +62,7 @@ Linktrix Tools 0.29.1.
 
 - `crates/linktrix-asio`, `crates/wat-asio`, `crates/linktrix-asio-host`,
   `tests/asio-abi.cpp`, `scripts/`: GNU General Public License version 3 only
-  ([COPYING](COPYING)).
+  ([LICENSE](LICENSE)).
 - `crates/linktrix-bus`: MIT ([LICENSE-MIT](crates/linktrix-bus/LICENSE-MIT)).
 - `third_party/asio`: Steinberg ASIO SDK interface headers, used under the
   GPLv3 option of their license ([LICENSE.txt](third_party/asio/LICENSE.txt)).
