@@ -3,7 +3,7 @@ members = ["crates/linktrix-asio", "crates/wat-asio", "crates/linktrix-asio-host
 resolver = "2"
 
 [workspace.package]
-version = "0.30.2"
+version = "0.30.3"
 edition = "2021"
 publish = false
 authors = ["Linktrix"]
