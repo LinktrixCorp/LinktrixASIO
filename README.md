@@ -54,9 +54,10 @@ New-ItemProperty 'HKLM:\SOFTWARE\ASIO\Linktrix Audio 64 IO' -Name CLSID -Value $
 
 ## Versions
 
-Tags match Linktrix Tools releases: tag `v0.29.1` is the corresponding source
-of the `linktrix_audio_asio.dll` and `linktrix_asio_host.exe` shipped with
-Linktrix Tools 0.29.1.
+Tags match Linktrix Tools releases: tag `v<version>` is the corresponding
+source of the `linktrix_audio_asio.dll` and `linktrix_asio_host.exe` shipped
+with Linktrix Tools `<version>` (for example `v0.30.2` for Linktrix Tools
+0.30.2).
 
 ## License
 
