@@ -123,10 +123,29 @@ mod host {
         }
     }
 
+    thread_local! {
+        /// This thread already runs in the "Pro Audio" MMCSS class.
+        static PRO_AUDIO: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    }
+    /// Raise the calling thread into the "Pro Audio" MMCSS class (once). Many
+    /// drivers call back on a plain time-critical thread (priority 15), which
+    /// other programs' time-critical threads preempt during a load spike; the
+    /// engine's own thread is already MMCSS and waits on this one.
+    unsafe fn ensure_pro_audio() {
+        if PRO_AUDIO.with(|p| p.replace(true)) {
+            return;
+        }
+        let mut task = 0;
+        let mm = AvSetMmThreadCharacteristicsW(linktrix_bus::wide("Pro Audio").as_ptr(), &mut task);
+        if !mm.is_null() {
+            AvSetMmThreadPriority(mm, AVRT_PRIORITY_CRITICAL);
+        }
+    }
     unsafe extern "C" fn buffer_switch(index: i32, _: i32) {
         if !(0..=1).contains(&index) || BUSY.swap(true, Ordering::Acquire) {
             return;
         }
+        ensure_pro_audio();
         let device = DEVICE.load(Ordering::Acquire);
         if !device.is_null() {
             (*device).switch(index as usize);
@@ -302,6 +321,7 @@ mod host {
                 if !mm.is_null() {
                     AvSetMmThreadPriority(mm, AVRT_PRIORITY_CRITICAL);
                 }
+                PRO_AUDIO.with(|p| p.set(true));
                 let mut next = std::time::Instant::now() + period;
                 let mut index = 0;
                 while !flag.load(Ordering::Acquire) {
@@ -338,6 +358,21 @@ mod host {
         };
         let requested: i32 = frames.parse().map_err(|_| format!("bad buffer size {frames}"))?;
         unsafe {
+            // This process has no window, so Windows 11 would otherwise count
+            // it as background work (EcoQoS: efficiency cores, low clocks).
+            let state = PROCESS_POWER_THROTTLING_STATE {
+                Version: PROCESS_POWER_THROTTLING_CURRENT_VERSION,
+                ControlMask: PROCESS_POWER_THROTTLING_EXECUTION_SPEED,
+                StateMask: 0,
+            };
+            SetProcessInformation(
+                GetCurrentProcess(),
+                ProcessPowerThrottling,
+                (&state as *const PROCESS_POWER_THROTTLING_STATE).cast(),
+                std::mem::size_of::<PROCESS_POWER_THROTTLING_STATE>() as u32,
+            );
+            // The driver's own helper threads (not MMCSS) run above normal work.
+            SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
             let hr = CoInitializeEx(null(), COINIT_APARTMENTTHREADED as u32);
             if hr < 0 {
                 return Err(format!("COM initialization: 0x{:08X}", hr as u32));
