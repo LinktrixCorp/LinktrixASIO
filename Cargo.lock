@@ -10,14 +10,14 @@ checksum = "330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470"
 
 [[package]]
 name = "linktrix-asio"
-version = "0.31.2"
+version = "0.31.3"
 dependencies = [
  "windows-sys",
 ]
 
 [[package]]
 name = "linktrix-asio-host"
-version = "0.31.2"
+version = "0.31.3"
 dependencies = [
  "linktrix-asio",
  "linktrix-bus",
@@ -26,7 +26,7 @@ dependencies = [
 
 [[package]]
 name = "linktrix-bus"
-version = "0.31.2"
+version = "0.31.3"
 dependencies = [
  "anyhow",
  "windows-sys",
@@ -34,7 +34,7 @@ dependencies = [
 
 [[package]]
 name = "wat-asio"
-version = "0.31.2"
+version = "0.31.3"
 dependencies = [
  "linktrix-asio",
  "linktrix-bus",
